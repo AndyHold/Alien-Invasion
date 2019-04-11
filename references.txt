@@ -1,0 +1,12 @@
+SkyBox
+http://scmapdb.com/wad:skybox-skies
+
+Textures
+http://seamless-pixels.blogspot.com/2015/04/stoney-dirt-ground-texture.html
+https://www.123rf.com/photo_46098525_old-gray-stone-wall-seamless-background-photo-texture.html
+https://www.sketchuptextureclub.com/textures/architecture/roofings/clay-roofs
+https://www.tryfoto.com/photo/3673/wooden-texture
+https://www.sketchuptextureclub.com/textures/architecture/tiles-interior/marble-tiles/white/rhino-marble-floor-tile-texture-seamless-14849
+
+Image Conversion
+https://image.online-convert.com/convert-to-tga
