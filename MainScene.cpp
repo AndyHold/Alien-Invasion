@@ -13,7 +13,7 @@
 using namespace std;
 
 //-- Globals---------------------------------------------------------------------------------------------
-float angle = 0.0, lookAngle = 0, verticleLookAngle = 0, look_x = 0.0, look_y = 100.0, look_z = 50.0, eye_x = 0.0, eye_y = 100.0, eye_z = 150.0;  // Camera 1 parameters
+float angle = 0.0, lookAngle = 0, verticleLookAngle = 0, look_x = 0.0, look_y = 30.0, look_z = 50.0, eye_x = 0.0, eye_y = 30.0, eye_z = 150.0;  // Camera 1 parameters
 float lightAngle = 0.0; // Main Light Source angle from the origin
 float lightXPosition = 60.0, lightZPosition = 0.0;
 bool camera2 = false;
@@ -569,23 +569,23 @@ void fireCannon()
 //-- Key press function for handling events -------------------------------
 void keyboard(unsigned char key, int x, int y)
 {
-    if (key == 'c')
+    if (key == 'c' || key == 'C')
     {
         fireCannon();
     }
-    else if (key == 's')
+    else if (key == 's' || key == 'S')
     {
         takeoff = !takeoff;
         if (lidAngle < 0.1) {
             glutTimerFunc(30, blastOff, 0);
         }
     }
-    else if (key == 'o') {
+    else if (key == 'o' || key == 'O') {
         if (gateAngle > 0) {
             gateAngle -= 1;
         }
     }
-    else if (key == 'l') {
+    else if (key == 'l' || key == 'L') {
         if (gateAngle < 90) {
             gateAngle += 1;
         }
@@ -830,7 +830,7 @@ void tower(bool shadow)
 }
 
 //-- Parapet -------------------------------------------------------------
-void parapet()
+void battlement()
 {
     glBegin(GL_QUADS);
       glNormal3f(0.0, 0.0, 1.0);   //Facing +z (Front side)
@@ -906,12 +906,12 @@ void wall(bool shadow)
     for (int i = -5; i < 5; i++) {
         glPushMatrix();
             glTranslatef(i * 10, 30, 5.5);
-            parapet();
+            battlement();
         glPopMatrix();
 
         glPushMatrix();
             glTranslatef(i * 10, 30, -5.5);
-            parapet();
+            battlement();
         glPopMatrix();
     }
 }
@@ -1008,12 +1008,12 @@ void gate_wall(bool shadow)
     for (int i = -5; i < 5; i++) {
         glPushMatrix();
             glTranslatef(i * 10, 30, 5.5);
-            parapet();
+            battlement();
         glPopMatrix();
 
         glPushMatrix();
             glTranslatef(i * 10, 30, -5.5);
-            parapet();
+            battlement();
         glPopMatrix();
     }
 }
