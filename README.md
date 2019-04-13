@@ -46,8 +46,20 @@
         lowered it can go through the front gate. The camera is also limited to a certain area
         so it cannot get too close to the skybox.
 
-###2.0 – Extra Features
-####2.1 – Planar Shadows
+###2.0 – Deployment Instructions
+    - Download and install CMake and Make from
+        https://cmake.org/download/
+        https://www.gnu.org/software/make/
+    - Clone the repository
+    - Open the terminal in the root folder of the cloned repository
+    - run the commands:
+        cmake CMakeLists.txt
+        make
+        ./MainScene.out
+    - enjoy the scene.
+
+###3.0 – Extra Features
+####3.1 – Planar Shadows
         I have cast planar shadows from every object in the scene. The
         fortress, robots (both on the walls and ground), space ship, cannon and hangar all
         have shadows on the ground surface with the robots on the walls also casting a
@@ -58,7 +70,7 @@
         in a Boolean to each function in which colours and or textures were used so that the
         appropriate changes could be made if the object was intended to be a shadow.
 
-####2.2 – Spot Lights
+####3.2 – Spot Lights
         I have placed 4 spotlights in the scene, one on the head of each of the robots
         manning the walls. They move and rotate at regular intervals along with the robots
         which can be clearly seen on both the ground and the fortress walls/towers.
@@ -71,7 +83,7 @@
         glutPostRedisplay it fixes itself. So as soon as I added animations that were present
         from the start the error went away.
 
-####2.3 – Additional Animated System Inside the Fortress
+####3.3 – Additional Animated System Inside the Fortress
         I added a draw bridge to the front of the fortress that can be controlled using the ‘l’
         and ‘o’ keys complete with shadows etc. It sits above the ground when down so as to
         be realistic.
@@ -82,18 +94,18 @@
         I also added Reflections to the floor inside the fortress, these
         include the hangar, fortress, robots, spaceship and the top of the skybox.
 
-####2.4 – Two camera modes
+####3.4 – Two camera modes
         I implemented an extra camera mode, which
         just swaps over using a Boolean trigger when rendering the scene, that way the
         position of the original camera is not affected and can be returned to. The altitude of
         the space ship is used as the altitude of the camera too which means it goes up and
         down as the ship does.
 
-####2.5 – Physics Models
+####3.5 – Physics Models
         The physics model I have used was for the trajectory of the cannonball which
         bounces with a dampener so that it behaves similar to in real life.
 
-####2.6 – Custom Built Sweep Surfaces
+####3.6 – Custom Built Sweep Surfaces
         I have 3 of these in my scene, the tower has 2 of these in the body and the roof of
         the tower, and the space ship’s body is also a custom-built sweep surface. All of
         these were extrusions made with triangle strips which I found to look the best for
@@ -101,13 +113,13 @@
         The only problem I had with these was that they would grow over time because they
         were not reset after each time they were rendered. This was easily fixed.
 
-####2.7 – Collision Detection
+####3.7 – Collision Detection
         I used collision detection quite heavily with my camera movement. I made it so the
         camera cannot move too far away from the centre of the scene and it also cannot go
         through the fortress walls, towers, or the hanger. I made it possible however to
         move through the gate portal only if the gate was fully lowered.
 
-####2.8 – Sky Box
+####3.8 – Sky Box
         The skybox I used took its texture from one of the textures provided in the labs. The
         walls and the ceiling all use GL_REPLACE whilst the floor uses GL_MODULATE so the
         spotlights etc work properly. I shrank the height of the skybox to make it look better,
@@ -116,7 +128,7 @@
         it look good. I had to play with it a lot in order to get it to the standard I have at the
         moment.
 
-###3.0 – Controls
+###4.0 – Controls
     Key         |   Function
     -------------------------------
     Up          |   Move the camera forwards

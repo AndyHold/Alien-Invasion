@@ -82,6 +82,8 @@ GLuint skyboxTexId[6];
 
 //-------------------------------------------------------------------------
 
+//-------------------------INITIALISERS------------------------------------------------------
+
 //-- Loads mesh data in OFF format    -------------------------------------
 void loadMeshFile(const char* fname)
 {
@@ -123,6 +125,156 @@ void loadMeshFile(const char* fname)
     cout << " File successfully read." << endl;
 }
 
+//-------------------Load glass texture------------------------------------
+void loadTextures()
+{
+    glGenTextures(4, texId);
+
+    // Castle Texture
+    glBindTexture(GL_TEXTURE_2D, texId[0]);
+    loadTGA("castle-texture.tga");
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+    // Roof Texture
+    glBindTexture(GL_TEXTURE_2D, texId[1]);
+    loadTGA("roof-texture.tga");
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+    // Gate Texture
+    glBindTexture(GL_TEXTURE_2D, texId[2]);
+    loadTGA("gate-texture.tga");
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+    // Tile Texture
+    glBindTexture(GL_TEXTURE_2D, texId[3]);
+    loadTGA("tile-texture.tga");
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+}
+
+//-- Load the skybox texture ----------------------------------------------
+void loadSkyboxTextures()
+{
+    glGenTextures(6, skyboxTexId); 		// Create texture id
+
+    glBindTexture(GL_TEXTURE_2D, skyboxTexId[0]);
+    loadTGA("left.tga");
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_2D, skyboxTexId[1]);
+    loadTGA("front.tga");
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_2D, skyboxTexId[2]);
+    loadTGA("right.tga");
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_2D, skyboxTexId[3]);
+    loadTGA("back.tga");
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_2D, skyboxTexId[4]);
+    loadTGA("up.tga");
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_2D, skyboxTexId[5]);
+    loadTGA("down.tga");
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
+
+//-------------------Initialization----------------------------------------
+void initialise()
+{
+    float greySpot[4] = {0.6, 0.6, 0.6, 1.0};
+    float greyMain[4] = {0.2, 0.2, 0.2, 1.0};
+    float white[4]  = {1.0, 1.0, 1.0, 1.0};
+
+    // Load the cannon file
+    loadMeshFile("Cannon.off");				//Specify mesh file name here
+    loadSkyboxTextures();
+    loadTextures();
+
+    glClearColor (0.0, 0.0, 0.0, 0.0);
+
+    glEnable(GL_LIGHTING);
+
+    glEnable(GL_LIGHT0);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, greyMain);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, white);
+
+    // Robot Spotlight 1
+    glEnable(GL_LIGHT1);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, greySpot);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, white);
+    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 15.0);
+    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 0.01);
+
+    // Robot Spotlight 2
+    glLightfv(GL_LIGHT2, GL_AMBIENT, greySpot);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, white);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 15.0);
+    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 0.01);
+
+    // Robot Spotlight 3
+    glEnable(GL_LIGHT3);
+    glLightfv(GL_LIGHT3, GL_AMBIENT, greySpot);
+    glLightfv(GL_LIGHT3, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT3, GL_SPECULAR, white);
+    glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, 15.0);
+    glLightf(GL_LIGHT3, GL_SPOT_EXPONENT, 0.01);
+
+    // Robot Spotlight 4
+    glEnable(GL_LIGHT4);
+    glLightfv(GL_LIGHT4, GL_AMBIENT, greySpot);
+    glLightfv(GL_LIGHT4, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT4, GL_SPECULAR, white);
+    glLightf(GL_LIGHT4, GL_SPOT_CUTOFF, 15.0);
+    glLightf(GL_LIGHT4, GL_SPOT_EXPONENT, 0.01);
+
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_NORMALIZE);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(80.0, 1.78, 0.1, 4000.0);
+}
+
+//-------------------------------------------------------------------------------------------
+
+
+//------------------------CALCULATIONS-------------------------------------------------------
+
 //--Function to compute the normal vector of a triangle with index tindx --
 void cannonNormal(int tindx)
 {
@@ -136,19 +288,53 @@ void cannonNormal(int tindx)
     glNormal3f(nx, ny, nz);
 }
 
-//--------draws the mesh model of the cannon-------------------------------
-void drawCannon()
+//-------------------------------------------------------------------------
+void normal(float x1, float y1, float z1,
+            float x2, float y2, float z2,
+              float x3, float y3, float z3 )
 {
-    //Construct the object model here using triangles read from OFF file
-    glBegin(GL_TRIANGLES);
-        for(int tindx = 0; tindx < ntri; tindx++)
-        {
-           cannonNormal(tindx);
-           glVertex3d(x[t1[tindx]], y[t1[tindx]], z[t1[tindx]]);
-           glVertex3d(x[t2[tindx]], y[t2[tindx]], z[t2[tindx]]);
-           glVertex3d(x[t3[tindx]], y[t3[tindx]], z[t3[tindx]]);
-        }
-    glEnd();
+      float nx, ny, nz;
+      nx = y1 * ( z2 - z3 ) + y2 * ( z3 - z1 ) + y3 * ( z1 - z2 );
+      ny = z1 * ( x2 - x3 ) + z2 * ( x3 - x1 ) + z3 * ( x1 - x2 );
+      nz = x1 * ( y2 - y3 ) + x2 * ( y3 - y1 ) + x3 * ( y1 - y2 );
+
+      glNormal3f( -nx, -ny, -nz );
+}
+
+//-- Cannon ball trajection calculator ------------------------------------
+void calculateBallFlight(int value)
+{
+    if (cannonBallFiring && cannonCounter < 150) {
+        cannonCounter++;
+        cannonBallZTranslation += 2;
+        cannonBallYTranslation = 30 * abs(sin(cannonBallZTranslation/20 + 6.5)) * exp(-0.19 * cannonBallZTranslation/20);
+
+        glutPostRedisplay();
+        glutTimerFunc(10, calculateBallFlight, 0);
+    } else {
+        cannonBallFiring = false;
+    }
+}
+
+//-------------------------------------------------------------------------------------------
+
+
+//------------------------ANIMATIONS---------------------------------------------------------
+
+//-- Function to fire the cannon ------------------------------------------
+void fireCannon()
+{
+    if (!cannonBallFiring) {
+        cannonBallFiring = true;
+        cannonBallYTranslation = 9.0;
+        cannonBallZTranslation = 0.0;
+        cannonCounter = 0;
+        glutTimerFunc( 10, calculateBallFlight, 1 );
+    } else {
+        cannonBallYTranslation = 9.0;
+        cannonBallZTranslation = 0.0;
+        cannonCounter = 0;
+    }
 }
 
 //-- Rotates the light around the scene -----------------------------------
@@ -201,58 +387,94 @@ void shipColorWarp(int value) {
     glutTimerFunc(30, shipColorWarp, 0);
 }
 
-//-- Cannon ---------------------------------------------------------------
-void cannon(bool shadow)
-{
-    glPushMatrix();
-    // Face towards the front
-        glScalef(0.2, 0.2, 0.2);
-        glRotatef(-90, 0, 1, 0);
+//-- Robot movement -------------------------------------------------------
+void moveRobots(int value) {
+    if (robotCounter > 45 && robotCounter < 90) {
+        robotAngle -= 2;
+    } else if (robotCounter > 90 && robotCounter < 135) {
+        robotArmsAngle -= 2;
+    } else if (robotCounter > 135 && robotCounter < 195) {
+        robotXposition--;
+    } else if (robotCounter > 195 && robotCounter < 240) {
+        robotArmsAngle += 2;
+    } else if (robotCounter > 240 && robotCounter < 285) {
+        robotAngle += 2;
+    } else if (robotCounter > 330 && robotCounter < 375) {
+        robotAngle += 2;
+    } else if (robotCounter > 375 && robotCounter < 420) {
+        robotArmsAngle -= 2;
+    } else if (robotCounter > 420 && robotCounter < 480) {
+        robotXposition++;
+    } else if (robotCounter > 480 && robotCounter < 525) {
+        robotArmsAngle += 2;
+    } else if (robotCounter > 525 && robotCounter < 570) {
+        robotAngle -= 2;
+    } else if (robotCounter > 570) {
+        robotCounter = 0;
+    }
 
-        // Cannon
-        glPushMatrix();
-            glTranslatef(-20.0, 30.0, 0.0);
-            glRotatef(40, 0.0, 0.0, 1.0);
-            glTranslatef(20.0, -30.0, 0.0);
-            if (shadow) {
-                glColor4f(0.2, 0.2, 0.2, 1.0);
-            } else {
-                glColor3f(0.41, 0.41, 0.41);
-            }
-            drawCannon();
-        glPopMatrix();
+    robotCounter++;
 
-        // Base
-        glPushMatrix();
-        glTranslatef(-10.0, 5.0, 17.0);
-        glScalef(80.0, 10.0, 6.0);
-        if (shadow) {
-            glColor4f(0.2, 0.2, 0.2, 1.0);
-        } else {
-            glColor3f(0.545, 0.271, 0.075);
-        }
-        glutSolidCube(1.0);
-        glPopMatrix();
-
-        glPushMatrix();
-        glTranslatef(-20.0, 25.0, 17.0);
-        glScalef(40.0, 30.0, 6.0);
-        glutSolidCube(1.0);
-        glPopMatrix();
-
-        glPushMatrix();
-        glTranslatef(-10.0, 5.0, -17.0);
-        glScalef(80.0, 10.0, 6.0);
-        glutSolidCube(1.0);
-        glPopMatrix();
-
-        glPushMatrix();
-        glTranslatef(-20.0, 25.0, -17.0);
-        glScalef(40.0, 30.0, 6.0);
-        glutSolidCube(1.0);
-        glPopMatrix();
-    glPopMatrix();
+    // Hand rotation
+    robotHandsAngle += 15;
+    if (robotHandsAngle > 359) {
+        robotHandsAngle = 0;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(30, moveRobots, 0);
 }
+
+//-- Robot Circle ---------------------------------------------------------
+void robotCircle(int value)
+{
+    robotCircleAngle++;
+    if (robotCircleAngle > 359.0) {
+        robotCircleAngle = 0;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(30, robotCircle, 0);
+}
+
+//-- Ship takeoff function ------------------------------------------------
+void blastOff(int value)
+{
+    if (lidAngle > 89 && takeoff && shipAltitude < 300) {
+        shipAltitude++;
+        shipRotationAngle += 5;
+        if (shipRotationAngle > 359) {
+            shipRotationAngle = 0;
+        }
+        glutPostRedisplay();
+        glutTimerFunc(30, blastOff, 0);
+    } else if (!takeoff && shipAltitude > 0) {
+        shipAltitude--;
+        shipRotationAngle += 5;
+        if (shipRotationAngle > 359) {
+            shipRotationAngle = 0;
+        }
+        glutPostRedisplay();
+        glutTimerFunc(30, blastOff, 0);
+    } else if (takeoff && lidAngle < 90) {
+        lidAngle++;
+        glutPostRedisplay();
+        glutTimerFunc(30, blastOff, 0);
+    } else if (shipAltitude < 0.1 && lidAngle > 0.0) {
+        lidAngle--;
+        glutPostRedisplay();
+        glutTimerFunc(30, blastOff, 0);
+    } else if (shipAltitude > 0.0) {
+        shipRotationAngle += 5;
+        if (shipRotationAngle > 359) {
+            shipRotationAngle = 0;
+        }
+        glutPostRedisplay();
+        glutTimerFunc(30, blastOff, 0);
+    }
+}
+
+//-------------------------------------------------------------------------------------------
+
+//------------------------KEY LISTENERS------------------------------------------------------
 
 //-- Camera control function ----------------------------------------------
 void special(int key, int x, int y)
@@ -402,170 +624,6 @@ void special(int key, int x, int y)
 
 }
 
-//-- Robot movement -------------------------------------------------------
-void moveRobots(int value) {
-    if (robotCounter > 45 && robotCounter < 90) {
-        robotAngle -= 2;
-    } else if (robotCounter > 90 && robotCounter < 135) {
-        robotArmsAngle -= 2;
-    } else if (robotCounter > 135 && robotCounter < 195) {
-        robotXposition--;
-    } else if (robotCounter > 195 && robotCounter < 240) {
-        robotArmsAngle += 2;
-    } else if (robotCounter > 240 && robotCounter < 285) {
-        robotAngle += 2;
-    } else if (robotCounter > 330 && robotCounter < 375) {
-        robotAngle += 2;
-    } else if (robotCounter > 375 && robotCounter < 420) {
-        robotArmsAngle -= 2;
-    } else if (robotCounter > 420 && robotCounter < 480) {
-        robotXposition++;
-    } else if (robotCounter > 480 && robotCounter < 525) {
-        robotArmsAngle += 2;
-    } else if (robotCounter > 525 && robotCounter < 570) {
-        robotAngle -= 2;
-    } else if (robotCounter > 570) {
-        robotCounter = 0;
-    }
-
-    robotCounter++;
-
-    // Hand rotation
-    robotHandsAngle += 15;
-    if (robotHandsAngle > 359) {
-        robotHandsAngle = 0;
-    }
-    glutPostRedisplay();
-    glutTimerFunc(30, moveRobots, 0);
-}
-
-//-- Robot Circle ---------------------------------------------------------
-void robotCircle(int value)
-{
-    robotCircleAngle++;
-    if (robotCircleAngle > 359.0) {
-        robotCircleAngle = 0;
-    }
-    glutPostRedisplay();
-    glutTimerFunc(30, robotCircle, 0);
-}
-
-//-- Ship takeoff function ------------------------------------------------
-void blastOff(int value)
-{
-    if (lidAngle > 89 && takeoff && shipAltitude < 300) {
-        shipAltitude++;
-        shipRotationAngle += 5;
-        if (shipRotationAngle > 359) {
-            shipRotationAngle = 0;
-        }
-        glutPostRedisplay();
-        glutTimerFunc(30, blastOff, 0);
-    } else if (!takeoff && shipAltitude > 0) {
-        shipAltitude--;
-        shipRotationAngle += 5;
-        if (shipRotationAngle > 359) {
-            shipRotationAngle = 0;
-        }
-        glutPostRedisplay();
-        glutTimerFunc(30, blastOff, 0);
-    } else if (takeoff && lidAngle < 90) {
-        lidAngle++;
-        glutPostRedisplay();
-        glutTimerFunc(30, blastOff, 0);
-    } else if (shipAltitude < 0.1 && lidAngle > 0.0) {
-        lidAngle--;
-        glutPostRedisplay();
-        glutTimerFunc(30, blastOff, 0);
-    } else if (shipAltitude > 0.0) {
-        shipRotationAngle += 5;
-        if (shipRotationAngle > 359) {
-            shipRotationAngle = 0;
-        }
-        glutPostRedisplay();
-        glutTimerFunc(30, blastOff, 0);
-    }
-}
-
-//-- Load the skybox texture ----------------------------------------------
-void loadSkyboxTextures()
-{
-    glGenTextures(6, skyboxTexId); 		// Create texture id
-
-    glBindTexture(GL_TEXTURE_2D, skyboxTexId[0]);
-    loadTGA("left.tga");
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glBindTexture(GL_TEXTURE_2D, skyboxTexId[1]);
-    loadTGA("front.tga");
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glBindTexture(GL_TEXTURE_2D, skyboxTexId[2]);
-    loadTGA("right.tga");
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glBindTexture(GL_TEXTURE_2D, skyboxTexId[3]);
-    loadTGA("back.tga");
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glBindTexture(GL_TEXTURE_2D, skyboxTexId[4]);
-    loadTGA("up.tga");
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glBindTexture(GL_TEXTURE_2D, skyboxTexId[5]);
-    loadTGA("down.tga");
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-}
-
-//-- Cannon ball trajection calculator ------------------------------------
-void calculateBallFlight(int value)
-{
-    if (cannonBallFiring && cannonCounter < 150) {
-        cannonCounter++;
-        cannonBallZTranslation += 2;
-        cannonBallYTranslation = 30 * abs(sin(cannonBallZTranslation/20 + 6.5)) * exp(-0.19 * cannonBallZTranslation/20);
-
-        glutPostRedisplay();
-        glutTimerFunc(10, calculateBallFlight, 0);
-    } else {
-        cannonBallFiring = false;
-    }
-}
-
-//-- Function to fire the cannon ------------------------------------------
-void fireCannon()
-{
-    if (!cannonBallFiring) {
-        cannonBallFiring = true;
-        cannonBallYTranslation = 9.0;
-        cannonBallZTranslation = 0.0;
-        cannonCounter = 0;
-        glutTimerFunc( 10, calculateBallFlight, 1 );
-    } else {
-        cannonBallYTranslation = 9.0;
-        cannonBallZTranslation = 0.0;
-        cannonCounter = 0;
-    }
-}
-
 //-- Key press function for handling events -------------------------------
 void keyboard(unsigned char key, int x, int y)
 {
@@ -593,151 +651,76 @@ void keyboard(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
-//-------------------Load glass texture------------------------------------
-void loadTextures()
+//-------------------------------------------------------------------------------------------
+
+//------------------------OBJECTS------------------------------------------------------------
+
+//--------draws the mesh model of the cannon-------------------------------
+void drawCannon()
 {
-    glGenTextures(5, texId);
-
-    // Floor Texture
-    glBindTexture(GL_TEXTURE_2D, texId[0]);
-    loadTGA("ground-texture.tga");
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-    // Castle Texture
-    glBindTexture(GL_TEXTURE_2D, texId[1]);
-    loadTGA("castle-texture.tga");
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-    // Roof Texture
-    glBindTexture(GL_TEXTURE_2D, texId[2]);
-    loadTGA("roof-texture.tga");
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-    // Gate Texture
-    glBindTexture(GL_TEXTURE_2D, texId[3]);
-    loadTGA("gate-texture.tga");
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-    // Tile Texture
-    glBindTexture(GL_TEXTURE_2D, texId[4]);
-    loadTGA("tile-texture.tga");
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-}
-
-//-------------------------------------------------------------------------
-void normal(float x1, float y1, float z1,
-            float x2, float y2, float z2,
-              float x3, float y3, float z3 )
-{
-      float nx, ny, nz;
-      nx = y1 * ( z2 - z3 ) + y2 * ( z3 - z1 ) + y3 * ( z1 - z2 );
-      ny = z1 * ( x2 - x3 ) + z2 * ( x3 - x1 ) + z3 * ( x1 - x2 );
-      nz = x1 * ( y2 - y3 ) + x2 * ( y3 - y1 ) + x3 * ( y1 - y2 );
-
-      glNormal3f( -nx, -ny, -nz );
-}
-
-//-------------------Initialization----------------------------------------
-void initialise()
-{
-    float greySpot[4] = {0.6, 0.6, 0.6, 1.0};
-    float greyMain[4] = {0.2, 0.2, 0.2, 1.0};
-    float white[4]  = {1.0, 1.0, 1.0, 1.0};
-
-    // Load the cannon file
-    loadMeshFile("Cannon.off");				//Specify mesh file name here
-    loadSkyboxTextures();
-    loadTextures();
-
-    glClearColor (0.0, 0.0, 0.0, 0.0);
-
-    glEnable(GL_LIGHTING);
-
-    glEnable(GL_LIGHT0);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, greyMain);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, white);
-
-    // Robot Spotlight 1
-    glEnable(GL_LIGHT1);
-    glLightfv(GL_LIGHT1, GL_AMBIENT, greySpot);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, white);
-    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 15.0);
-    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 0.01);
-
-    // Robot Spotlight 2
-    glLightfv(GL_LIGHT2, GL_AMBIENT, greySpot);
-    glLightfv(GL_LIGHT2, GL_DIFFUSE, white);
-    glLightfv(GL_LIGHT2, GL_SPECULAR, white);
-    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 15.0);
-    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 0.01);
-
-    // Robot Spotlight 3
-    glEnable(GL_LIGHT3);
-    glLightfv(GL_LIGHT3, GL_AMBIENT, greySpot);
-    glLightfv(GL_LIGHT3, GL_DIFFUSE, white);
-    glLightfv(GL_LIGHT3, GL_SPECULAR, white);
-    glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, 15.0);
-    glLightf(GL_LIGHT3, GL_SPOT_EXPONENT, 0.01);
-
-    // Robot Spotlight 4
-    glEnable(GL_LIGHT4);
-    glLightfv(GL_LIGHT4, GL_AMBIENT, greySpot);
-    glLightfv(GL_LIGHT4, GL_DIFFUSE, white);
-    glLightfv(GL_LIGHT4, GL_SPECULAR, white);
-    glLightf(GL_LIGHT4, GL_SPOT_CUTOFF, 15.0);
-    glLightf(GL_LIGHT4, GL_SPOT_EXPONENT, 0.01);
-
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
-
-	glEnable(GL_DEPTH_TEST);
-    glEnable(GL_NORMALIZE);
-
-	glMatrixMode(GL_PROJECTION);						
-    glLoadIdentity();
-    gluPerspective(80.0, 1.78, 0.1, 4000.0);
-}
-
-//-- Castle Floor Plane ---------------------------------------------------------
-void castleFloor()
-{
-    float floor_height = -0.1;
-
-    glColor4f(1.0, 1.0, 1.0, 0.3);   //The fourth component is the transparency term for reflection
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glBindTexture(GL_TEXTURE_2D, texId[4]);
-
-    glNormal3f(0.0, 1.0, 0.0);
-
-    //The floor is made up of several tiny squares on a 114x114 grid. Each square has a unit size.
-    glBegin(GL_QUADS);
-    for(int i = -57; i < 57; i++)
-    {
-        for(int j = -57;  j < 57; j++)
+    //Construct the object model here using triangles read from OFF file
+    glBegin(GL_TRIANGLES);
+        for(int tindx = 0; tindx < ntri; tindx++)
         {
-            glTexCoord2f((i + 57) * 0.00877, (j + 57) * 0.00877);   glVertex3f(i,   floor_height, j  );
-            glTexCoord2f((i + 57) * 0.00877, (j + 57) * 0.00877);   glVertex3f(i,   floor_height, j+1);
-            glTexCoord2f((i + 57) * 0.00877, (j + 57) * 0.00877);   glVertex3f(i+1, floor_height, j+1);
-            glTexCoord2f((i + 57) * 0.00877, (j + 57) * 0.00877);   glVertex3f(i+1, floor_height, j  );
+           cannonNormal(tindx);
+           glVertex3d(x[t1[tindx]], y[t1[tindx]], z[t1[tindx]]);
+           glVertex3d(x[t2[tindx]], y[t2[tindx]], z[t2[tindx]]);
+           glVertex3d(x[t3[tindx]], y[t3[tindx]], z[t3[tindx]]);
         }
-    }
     glEnd();
+}
 
-    glDisable(GL_TEXTURE_2D);
+//-- Cannon ---------------------------------------------------------------
+void cannon(bool shadow)
+{
+    glPushMatrix();
+    // Face towards the front
+        glScalef(0.2, 0.2, 0.2);
+        glRotatef(-90, 0, 1, 0);
+
+        // Cannon
+        glPushMatrix();
+            glTranslatef(-20.0, 30.0, 0.0);
+            glRotatef(40, 0.0, 0.0, 1.0);
+            glTranslatef(20.0, -30.0, 0.0);
+            if (shadow) {
+                glColor4f(0.2, 0.2, 0.2, 1.0);
+            } else {
+                glColor3f(0.41, 0.41, 0.41);
+            }
+            drawCannon();
+        glPopMatrix();
+
+        // Base
+        glPushMatrix();
+        glTranslatef(-10.0, 5.0, 17.0);
+        glScalef(80.0, 10.0, 6.0);
+        if (shadow) {
+            glColor4f(0.2, 0.2, 0.2, 1.0);
+        } else {
+            glColor3f(0.545, 0.271, 0.075);
+        }
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-20.0, 25.0, 17.0);
+        glScalef(40.0, 30.0, 6.0);
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-10.0, 5.0, -17.0);
+        glScalef(80.0, 10.0, 6.0);
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-20.0, 25.0, -17.0);
+        glScalef(40.0, 30.0, 6.0);
+        glutSolidCube(1.0);
+        glPopMatrix();
+    glPopMatrix();
 }
 
 //-- Roof of a tower
@@ -750,7 +733,7 @@ void roof(bool shadow)
         glColor4f(0.2, 0.2, 0.2, 1.0);
     } else {
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texId[2]);
+        glBindTexture(GL_TEXTURE_2D, texId[1]);
     }
 
     //  Include code for drawing the surface of revolution here.
@@ -790,7 +773,7 @@ void tower(bool shadow)
         glColor4f(0.2, 0.2, 0.2, 1.0);
     } else {
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texId[1]);
+        glBindTexture(GL_TEXTURE_2D, texId[0]);
         glColor4f (1.0, 0.75, 0.5, 1.0);
     }
 
@@ -890,7 +873,7 @@ void wall(bool shadow)
         glColor4f(0.2, 0.2, 0.2, 1.0);
     } else {
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texId[1]);
+        glBindTexture(GL_TEXTURE_2D, texId[0]);
     }
 
     glBegin(GL_QUADS);
@@ -932,6 +915,57 @@ void wall(bool shadow)
     }
 }
 
+//-- Gate ----------------------------------------------------------------
+void gate(bool shadow)
+{
+    //-- Gate -------------------------------------------------------
+    if (shadow) {
+        glColor4f(0.2, 0.2, 0.2, 1.0);
+    } else {
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texId[2]);
+    }
+    glBegin(GL_QUADS);
+
+        glNormal3f(0.0, 0.0, 1.0);      //Facing +z (Front side)
+        glTexCoord2f(0.0, 0.0);     glVertex3f(-11.0, 0.0, 8.0);
+        glTexCoord2f(1.0, 0.0);     glVertex3f(11.0, 0.0, 8.0);
+        glTexCoord2f(1.0, 1.0);     glVertex3f(11.0, 26.0, 8.0);
+        glTexCoord2f(0.0, 1.0);     glVertex3f(-11.0, 26.0, 8.0);
+
+        glNormal3f(0.0, 0.0, -1.0);     //Facing -z (Back side)
+        glTexCoord2f(1.0, 1.0);     glVertex3f(11.0, 0.0,  7.0);
+        glTexCoord2f(0.0, 1.0);     glVertex3f(-11.0, 0.0, 7.0);
+        glTexCoord2f(0.0, 0.0);     glVertex3f(-11.0, 26.0, 7.0);
+        glTexCoord2f(1.0, 0.0);     glVertex3f(11.0, 26.0,  7.0);
+
+        glNormal3f(0.0, 1.0, 0.0);     //Facing +y (Top side)
+        glTexCoord2f(0.0, 0.0);      glVertex3f(-11.0, 26.0, 8.0);
+        glTexCoord2f(0.1, 0.0);      glVertex3f(11.0, 26.0,  8.0);
+        glTexCoord2f(0.0, 0.1);      glVertex3f(11.0, 26.0,  7.0);
+        glTexCoord2f(0.1, 0.1);      glVertex3f(-11.0, 26.0, 7.0);
+
+        glNormal3f(0.0, -1.0, 0.0);     //Facing -y (Under side)
+        glTexCoord2f(0.0, 0.0);      glVertex3f(11.0, 0.0, 7.0);
+        glTexCoord2f(0.1, 0.0);      glVertex3f(-11.0, 0.0,  7.0);
+        glTexCoord2f(0.1, 0.1);      glVertex3f(-11.0, 0.0,  8.0);
+        glTexCoord2f(0.0, 0.1);      glVertex3f(11.0, 0.0, 8.0);
+
+        glNormal3f(-1.0, 0.0, 0.0);     //Facing -x (Left side)
+        glTexCoord2f(0.0, 0.4492);      glVertex3f(-11.0, 0.0, 7.0);
+        glTexCoord2f(1.0, 0.4492);      glVertex3f(-11.0, 0.0,  8.0);
+        glTexCoord2f(1.0, 0.8281);      glVertex3f(-11.0, 26.0, 8.0);
+        glTexCoord2f(0.0, 0.8281);      glVertex3f(-11.0, 26.0, 7.0);
+
+        glNormal3f(1.0, 0.0, 0.0);     //Facing +x (Right side)
+        glTexCoord2f(0.0, 0.4492);      glVertex3f(11.0, 0.0, 8.0);
+        glTexCoord2f(1.0, 0.4492);      glVertex3f(11.0, 0.0,  7.0);
+        glTexCoord2f(1.0, 0.8281);      glVertex3f(11.0, 26.0, 7.0);
+        glTexCoord2f(0.0, 0.8281);      glVertex3f(11.0, 26.0, 8.0);
+
+    glEnd();
+}
+
 //-- Gate Wall -----------------------------------------------------------
 void gate_wall(bool shadow)
 {
@@ -940,7 +974,7 @@ void gate_wall(bool shadow)
         glColor4f(0.2, 0.2, 0.2, 1.0);
     } else {
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texId[1]);
+        glBindTexture(GL_TEXTURE_2D, texId[0]);
     }
 
     // Build the walls
@@ -1034,57 +1068,6 @@ void gate_wall(bool shadow)
     }
 }
 
-//-- Gate ----------------------------------------------------------------
-void gate(bool shadow)
-{
-    //-- Gate -------------------------------------------------------
-    if (shadow) {
-        glColor4f(0.2, 0.2, 0.2, 1.0);
-    } else {
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texId[3]);
-    }
-    glBegin(GL_QUADS);
-
-        glNormal3f(0.0, 0.0, 1.0);      //Facing +z (Front side)
-        glTexCoord2f(0.0, 0.0);     glVertex3f(-11.0, 0.0, 8.0);
-        glTexCoord2f(1.0, 0.0);     glVertex3f(11.0, 0.0, 8.0);
-        glTexCoord2f(1.0, 1.0);     glVertex3f(11.0, 26.0, 8.0);
-        glTexCoord2f(0.0, 1.0);     glVertex3f(-11.0, 26.0, 8.0);
-
-        glNormal3f(0.0, 0.0, -1.0);     //Facing -z (Back side)
-        glTexCoord2f(1.0, 1.0);     glVertex3f(11.0, 0.0,  7.0);
-        glTexCoord2f(0.0, 1.0);     glVertex3f(-11.0, 0.0, 7.0);
-        glTexCoord2f(0.0, 0.0);     glVertex3f(-11.0, 26.0, 7.0);
-        glTexCoord2f(1.0, 0.0);     glVertex3f(11.0, 26.0,  7.0);
-
-        glNormal3f(0.0, 1.0, 0.0);     //Facing +y (Top side)
-        glTexCoord2f(0.0, 0.0);      glVertex3f(-11.0, 26.0, 8.0);
-        glTexCoord2f(0.1, 0.0);      glVertex3f(11.0, 26.0,  8.0);
-        glTexCoord2f(0.0, 0.1);      glVertex3f(11.0, 26.0,  7.0);
-        glTexCoord2f(0.1, 0.1);      glVertex3f(-11.0, 26.0, 7.0);
-
-        glNormal3f(0.0, -1.0, 0.0);     //Facing -y (Under side)
-        glTexCoord2f(0.0, 0.0);      glVertex3f(11.0, 0.0, 7.0);
-        glTexCoord2f(0.1, 0.0);      glVertex3f(-11.0, 0.0,  7.0);
-        glTexCoord2f(0.1, 0.1);      glVertex3f(-11.0, 0.0,  8.0);
-        glTexCoord2f(0.0, 0.1);      glVertex3f(11.0, 0.0, 8.0);
-
-        glNormal3f(-1.0, 0.0, 0.0);     //Facing -x (Left side)
-        glTexCoord2f(0.0, 0.4492);      glVertex3f(-11.0, 0.0, 7.0);
-        glTexCoord2f(1.0, 0.4492);      glVertex3f(-11.0, 0.0,  8.0);
-        glTexCoord2f(1.0, 0.8281);      glVertex3f(-11.0, 26.0, 8.0);
-        glTexCoord2f(0.0, 0.8281);      glVertex3f(-11.0, 26.0, 7.0);
-
-        glNormal3f(1.0, 0.0, 0.0);     //Facing +x (Right side)
-        glTexCoord2f(0.0, 0.4492);      glVertex3f(11.0, 0.0, 8.0);
-        glTexCoord2f(1.0, 0.4492);      glVertex3f(11.0, 0.0,  7.0);
-        glTexCoord2f(1.0, 0.8281);      glVertex3f(11.0, 26.0, 7.0);
-        glTexCoord2f(0.0, 0.8281);      glVertex3f(11.0, 26.0, 8.0);
-
-    glEnd();
-}
-
 //-- Castle --------------------------------------------------------------
 void castle(bool shadow)
 {
@@ -1092,7 +1075,7 @@ void castle(bool shadow)
         glColor4f(0.2, 0.2, 0.2, 1.0);
     } else {
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texId[1]);
+        glBindTexture(GL_TEXTURE_2D, texId[0]);
     }
 
     //-- Towers ------------------------------------
@@ -1604,7 +1587,7 @@ void robot(bool wallRobot, bool shadow)
     glPopMatrix();
 }
 
-//-- Cannon Balls --------------------------------------------------------
+//-- Cannon Ball --------------------------------------------------------
 void cannonBall(bool shadow)
 {
     if (shadow) {
@@ -1688,6 +1671,10 @@ void hangar(bool shadow)
         glPopMatrix();
     glPopMatrix();
 }
+
+//-------------------------------------------------------------------------------------------
+
+//----------------------FLOOR AND BACKGROUND-------------------------------------------------
 
 //-- Sky Box -------------------------------------------------------------
 void skybox(float light[])
@@ -1804,6 +1791,40 @@ void skybox(float light[])
     glEnd();
 
 }
+
+//-- Castle Floor Plane ---------------------------------------------------------
+void castleFloor()
+{
+    float floor_height = -0.1;
+
+    glColor4f(1.0, 1.0, 1.0, 0.3);   //The fourth component is the transparency term for reflection
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBindTexture(GL_TEXTURE_2D, texId[3]);
+
+    glNormal3f(0.0, 1.0, 0.0);
+
+    //The floor is made up of several tiny squares on a 114x114 grid. Each square has a unit size.
+    glBegin(GL_QUADS);
+    for(int i = -57; i < 57; i++)
+    {
+        for(int j = -57;  j < 57; j++)
+        {
+            glTexCoord2f((i + 57) * 0.00877, (j + 57) * 0.00877);   glVertex3f(i,   floor_height, j  );
+            glTexCoord2f((i + 57) * 0.00877, (j + 57) * 0.00877);   glVertex3f(i,   floor_height, j+1);
+            glTexCoord2f((i + 57) * 0.00877, (j + 57) * 0.00877);   glVertex3f(i+1, floor_height, j+1);
+            glTexCoord2f((i + 57) * 0.00877, (j + 57) * 0.00877);   glVertex3f(i+1, floor_height, j  );
+        }
+    }
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+}
+
+//-------------------------------------------------------------------------------------------
+
+//---------------------MAIN AND DISPLAY------------------------------------------------------
 
 //----------------Display Callback----------------------------------------
 void display() 
@@ -2192,14 +2213,11 @@ void display()
         glEnable(GL_LIGHTING);
     glPopMatrix();
 
-//  Draw floors
-//    floor();
+//  Draw floor and Sky Box
     castleFloor();
-
     skybox(light);
 
     glutSwapBuffers();
-
     glFlush();
 }
 
@@ -2223,3 +2241,5 @@ int main(int argc, char** argv)
    glutMainLoop();
    return 0;
 }
+
+//-------------------------------------------------------------------------------------------
